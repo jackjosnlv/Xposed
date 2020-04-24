@@ -36,22 +36,22 @@ extern bool onVmCreated(JNIEnv* env);
 extern void prepareSubclassReplacement(JNIEnv* env, jclass clazz);
 extern void logExceptionStackTrace();
 
-extern jint    XposedBridge_getRuntime(JNIEnv* env, jclass clazz);
-extern void    XposedBridge_hookMethodNative(JNIEnv* env, jclass clazz, jobject reflectedMethodIndirect,
+extern jint    ZposedBridge_getRuntime(JNIEnv* env, jclass clazz);
+extern void    ZposedBridge_hookMethodNative(JNIEnv* env, jclass clazz, jobject reflectedMethodIndirect,
                                              jobject declaredClassIndirect, jint slot, jobject additionalInfoIndirect);
-extern void    XposedBridge_setObjectClassNative(JNIEnv* env, jclass clazz, jobject objIndirect, jclass clzIndirect);
-extern jobject XposedBridge_cloneToSubclassNative(JNIEnv* env, jclass clazz, jobject objIndirect, jclass clzIndirect);
-extern void    XposedBridge_dumpObjectNative(JNIEnv* env, jclass clazz, jobject objIndirect);
-extern void    XposedBridge_removeFinalFlagNative(JNIEnv* env, jclass clazz, jclass javaClazz);
+extern void    ZposedBridge_setObjectClassNative(JNIEnv* env, jclass clazz, jobject objIndirect, jclass clzIndirect);
+extern jobject ZposedBridge_cloneToSubclassNative(JNIEnv* env, jclass clazz, jobject objIndirect, jclass clzIndirect);
+extern void    ZposedBridge_dumpObjectNative(JNIEnv* env, jclass clazz, jobject objIndirect);
+extern void    ZposedBridge_removeFinalFlagNative(JNIEnv* env, jclass clazz, jclass javaClazz);
 
 #if PLATFORM_SDK_VERSION >= 21
-extern jobject XposedBridge_invokeOriginalMethodNative(JNIEnv* env, jclass, jobject javaMethod, jint, jobjectArray,
+extern jobject ZposedBridge_invokeOriginalMethodNative(JNIEnv* env, jclass, jobject javaMethod, jint, jobjectArray,
                                                        jclass, jobject javaReceiver, jobjectArray javaArgs);
-extern void    XposedBridge_closeFilesBeforeForkNative(JNIEnv* env, jclass clazz);
-extern void    XposedBridge_reopenFilesAfterForkNative(JNIEnv* env, jclass clazz);
+extern void    ZposedBridge_closeFilesBeforeForkNative(JNIEnv* env, jclass clazz);
+extern void    ZposedBridge_reopenFilesAfterForkNative(JNIEnv* env, jclass clazz);
 #endif
 #if PLATFORM_SDK_VERSION >= 24
-extern void    XposedBridge_invalidateCallersNative(JNIEnv*, jclass, jobjectArray javaMethods);
+extern void    ZposedBridge_invalidateCallersNative(JNIEnv*, jclass, jobjectArray javaMethods);
 #endif
 
 }  // namespace xposed

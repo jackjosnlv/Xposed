@@ -75,7 +75,7 @@ void logExceptionStackTrace() {
 // JNI methods
 ////////////////////////////////////////////////////////////
 
-void XposedBridge_hookMethodNative(JNIEnv* env, jclass, jobject javaReflectedMethod,
+void ZposedBridge_hookMethodNative(JNIEnv* env, jclass, jobject javaReflectedMethod,
             jobject, jint, jobject javaAdditionalInfo) {
     // Detect usage errors.
     ScopedObjectAccess soa(env);
@@ -95,7 +95,7 @@ void XposedBridge_hookMethodNative(JNIEnv* env, jclass, jobject javaReflectedMet
     artMethod->EnableXposedHook(soa, javaAdditionalInfo);
 }
 
-jobject XposedBridge_invokeOriginalMethodNative(JNIEnv* env, jclass, jobject javaMethod,
+jobject ZposedBridge_invokeOriginalMethodNative(JNIEnv* env, jclass, jobject javaMethod,
             jint isResolved, jobjectArray, jclass, jobject javaReceiver, jobjectArray javaArgs) {
     ScopedFastNativeObjectAccess soa(env);
     if (UNLIKELY(!isResolved)) {
@@ -111,7 +111,7 @@ jobject XposedBridge_invokeOriginalMethodNative(JNIEnv* env, jclass, jobject jav
 #endif
 }
 
-void XposedBridge_setObjectClassNative(JNIEnv* env, jclass, jobject javaObj, jclass javaClazz) {
+void ZposedBridge_setObjectClassNative(JNIEnv* env, jclass, jobject javaObj, jclass javaClazz) {
     ScopedObjectAccess soa(env);
     StackHandleScope<3> hs(soa.Self());
     Handle<mirror::Class> clazz(hs.NewHandle(soa.Decode<mirror::Class*>(javaClazz)));
@@ -139,12 +139,12 @@ void XposedBridge_setObjectClassNative(JNIEnv* env, jclass, jobject javaObj, jcl
     obj->SetClass(clazz.Get());
 }
 
-void XposedBridge_dumpObjectNative(JNIEnv*, jclass, jobject) {
+void ZposedBridge_dumpObjectNative(JNIEnv*, jclass, jobject) {
     // TODO Can be useful for debugging
     UNIMPLEMENTED(ERROR|LOG_XPOSED);
 }
 
-jobject XposedBridge_cloneToSubclassNative(JNIEnv* env, jclass, jobject javaObject, jclass javaClazz) {
+jobject ZposedBridge_cloneToSubclassNative(JNIEnv* env, jclass, jobject javaObject, jclass javaClazz) {
     ScopedObjectAccess soa(env);
     StackHandleScope<3> hs(soa.Self());
     Handle<mirror::Object> obj(hs.NewHandle(soa.Decode<mirror::Object*>(javaObject)));
@@ -153,7 +153,7 @@ jobject XposedBridge_cloneToSubclassNative(JNIEnv* env, jclass, jobject javaObje
     return soa.AddLocalReference<jobject>(dest.Get());
 }
 
-void XposedBridge_removeFinalFlagNative(JNIEnv* env, jclass, jclass javaClazz) {
+void ZposedBridge_removeFinalFlagNative(JNIEnv* env, jclass, jclass javaClazz) {
     ScopedObjectAccess soa(env);
     StackHandleScope<1> hs(soa.Self());
     Handle<mirror::Class> clazz(hs.NewHandle(soa.Decode<mirror::Class*>(javaClazz)));
@@ -163,18 +163,18 @@ void XposedBridge_removeFinalFlagNative(JNIEnv* env, jclass, jclass javaClazz) {
     }
 }
 
-jint XposedBridge_getRuntime(JNIEnv*, jclass) {
+jint ZposedBridge_getRuntime(JNIEnv*, jclass) {
     return 2; // RUNTIME_ART
 }
 
 #if PLATFORM_SDK_VERSION >= 21
 static FileDescriptorTable* gClosedFdTable = NULL;
 
-void XposedBridge_closeFilesBeforeForkNative(JNIEnv*, jclass) {
+void ZposedBridge_closeFilesBeforeForkNative(JNIEnv*, jclass) {
     gClosedFdTable = FileDescriptorTable::Create();
 }
 
-void XposedBridge_reopenFilesAfterForkNative(JNIEnv*, jclass) {
+void ZposedBridge_reopenFilesAfterForkNative(JNIEnv*, jclass) {
     gClosedFdTable->Reopen();
     delete gClosedFdTable;
     gClosedFdTable = NULL;
@@ -182,7 +182,7 @@ void XposedBridge_reopenFilesAfterForkNative(JNIEnv*, jclass) {
 #endif
 
 #if PLATFORM_SDK_VERSION >= 24
-void XposedBridge_invalidateCallersNative(JNIEnv* env, jclass, jobjectArray javaMethods) {
+void ZposedBridge_invalidateCallersNative(JNIEnv* env, jclass, jobjectArray javaMethods) {
     ScopedObjectAccess soa(env);
     auto* runtime = Runtime::Current();
     auto* cl = runtime->GetClassLinker();

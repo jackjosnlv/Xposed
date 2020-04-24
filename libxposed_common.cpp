@@ -147,23 +147,23 @@ void onVmCreatedCommon(JNIEnv* env) {
 // JNI methods
 ////////////////////////////////////////////////////////////
 
-jboolean XposedBridge_hadInitErrors(JNIEnv*, jclass) {
+jboolean ZposedBridge_hadInitErrors(JNIEnv*, jclass) {
     return !xposedLoadedSuccessfully;
 }
 
-jobject XposedBridge_getStartClassName(JNIEnv* env, jclass) {
+jobject ZposedBridge_getStartClassName(JNIEnv* env, jclass) {
     return env->NewStringUTF(xposed->startClassName);
 }
 
-jboolean XposedBridge_startsSystemServer(JNIEnv*, jclass) {
+jboolean ZposedBridge_startsSystemServer(JNIEnv*, jclass) {
     return xposed->startSystemServer;
 }
 
-jint XposedBridge_getXposedVersion(JNIEnv*, jclass) {
+jint ZposedBridge_getXposedVersion(JNIEnv*, jclass) {
     return xposed->xposedVersionInt;
 }
 
-jboolean XposedBridge_initXResourcesNative(JNIEnv* env, jclass) {
+jboolean ZposedBridge_initXResourcesNative(JNIEnv* env, jclass) {
     classXResources = env->FindClass(CLASS_XRESOURCES);
     if (classXResources == NULL) {
         ALOGE("Error while loading XResources class '%s':", CLASS_XRESOURCES);

@@ -17,7 +17,7 @@ namespace xposed {
 
 bool initMemberOffsets(JNIEnv* env);
 void hookedMethodCallback(const u4* args, JValue* pResult, const Method* method, ::Thread* self);
-void XposedBridge_invokeOriginalMethodNative(const u4* args, JValue* pResult, const Method* method, ::Thread* self);
+void ZposedBridge_invokeOriginalMethodNative(const u4* args, JValue* pResult, const Method* method, ::Thread* self);
 
 
 ////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ bool onVmCreated(JNIEnv* env) {
         env->ExceptionClear();
         return false;
     }
-    dvmSetNativeFunc(xposedInvokeOriginalMethodNative, XposedBridge_invokeOriginalMethodNative, NULL);
+    dvmSetNativeFunc(xposedInvokeOriginalMethodNative, ZposedBridge_invokeOriginalMethodNative, NULL);
 
     objectArrayClass = dvmFindArrayClass("[Ljava/lang/Object;", NULL);
     if (objectArrayClass == NULL) {
@@ -235,7 +235,7 @@ void hookedMethodCallback(const u4* args, JValue* pResult, const Method* method,
 }
 
 
-void XposedBridge_hookMethodNative(JNIEnv* env, jclass clazz, jobject reflectedMethodIndirect,
+void ZposedBridge_hookMethodNative(JNIEnv* env, jclass clazz, jobject reflectedMethodIndirect,
             jobject declaredClassIndirect, jint slot, jobject additionalInfoIndirect) {
     // Usage errors?
     if (declaredClassIndirect == NULL || reflectedMethodIndirect == NULL) {
@@ -285,7 +285,7 @@ void XposedBridge_hookMethodNative(JNIEnv* env, jclass clazz, jobject reflectedM
  * Simplified copy of Method.invokeNative(), but calls the original (non-hooked) method
  * and has no access checks. Used to call the real implementation of hooked methods.
  */
-void XposedBridge_invokeOriginalMethodNative(const u4* args, JValue* pResult,
+void ZposedBridge_invokeOriginalMethodNative(const u4* args, JValue* pResult,
             const Method* method, ::Thread* self) {
     Method* meth = (Method*) args[1];
     if (meth == NULL) {
@@ -304,7 +304,7 @@ void XposedBridge_invokeOriginalMethodNative(const u4* args, JValue* pResult,
     return;
 }
 
-void XposedBridge_setObjectClassNative(JNIEnv* env, jclass clazz, jobject objIndirect, jclass clzIndirect) {
+void ZposedBridge_setObjectClassNative(JNIEnv* env, jclass clazz, jobject objIndirect, jclass clzIndirect) {
     Object* obj = (Object*) dvmDecodeIndirectRef(dvmThreadSelf(), objIndirect);
     ClassObject* clz = (ClassObject*) dvmDecodeIndirectRef(dvmThreadSelf(), clzIndirect);
     if (clz->status < CLASS_INITIALIZED && !dvmInitClass(clz)) {
@@ -314,12 +314,12 @@ void XposedBridge_setObjectClassNative(JNIEnv* env, jclass clazz, jobject objInd
     obj->clazz = clz;
 }
 
-void XposedBridge_dumpObjectNative(JNIEnv* env, jclass clazz, jobject objIndirect) {
+void ZposedBridge_dumpObjectNative(JNIEnv* env, jclass clazz, jobject objIndirect) {
     Object* obj = (Object*) dvmDecodeIndirectRef(dvmThreadSelf(), objIndirect);
     dvmDumpObject(obj);
 }
 
-jobject XposedBridge_cloneToSubclassNative(JNIEnv* env, jclass clazz, jobject objIndirect, jclass clzIndirect) {
+jobject ZposedBridge_cloneToSubclassNative(JNIEnv* env, jclass clazz, jobject objIndirect, jclass clzIndirect) {
     Object* obj = (Object*) dvmDecodeIndirectRef(dvmThreadSelf(), objIndirect);
     ClassObject* clz = (ClassObject*) dvmDecodeIndirectRef(dvmThreadSelf(), clzIndirect);
 
@@ -338,14 +338,14 @@ jobject XposedBridge_cloneToSubclassNative(JNIEnv* env, jclass clazz, jobject ob
     return copyIndirect;
 }
 
-void XposedBridge_removeFinalFlagNative(JNIEnv* env, jclass, jclass javaClazz) {
+void ZposedBridge_removeFinalFlagNative(JNIEnv* env, jclass, jclass javaClazz) {
     ClassObject* clazz = (ClassObject*) dvmDecodeIndirectRef(dvmThreadSelf(), javaClazz);
     if (dvmIsFinalClass(clazz)) {
         clazz->accessFlags &= ~ACC_FINAL;
     }
 }
 
-jint XposedBridge_getRuntime(JNIEnv* env, jclass clazz) {
+jint ZposedBridge_getRuntime(JNIEnv* env, jclass clazz) {
     return 1; // RUNTIME_DALVIK
 }
 
