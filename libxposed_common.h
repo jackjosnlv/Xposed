@@ -21,8 +21,8 @@ namespace xposed {
 /////////////////////////////////////////////////////////////////
 // Provided by common part, used by runtime-specific implementation
 /////////////////////////////////////////////////////////////////
-extern jclass classXposedBridge;
-extern jmethodID methodXposedBridgeHandleHookedMethod;
+extern jclass classZposedBridge;
+extern jmethodID methodZposedBridgeHandleHookedMethod;
 
 extern int readIntConfig(const char* fileName, int defaultValue);
 extern void onVmCreatedCommon(JNIEnv* env);

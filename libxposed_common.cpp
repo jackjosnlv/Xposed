@@ -24,11 +24,11 @@ namespace xposed {
 
 bool xposedLoadedSuccessfully = false;
 xposed::XposedShared* xposed = NULL;
-jclass classXposedBridge = NULL;
+jclass classZposedBridge = NULL;
 static jclass classXResources = NULL;
 static jclass classFileResult = NULL;
 
-jmethodID methodXposedBridgeHandleHookedMethod = NULL;
+jmethodID methodZposedBridgeHandleHookedMethod = NULL;
 static jmethodID methodXResourcesTranslateResId = NULL;
 static jmethodID methodXResourcesTranslateAttrId = NULL;
 static jmethodID constructorFileResult = NULL;
@@ -38,7 +38,7 @@ static jmethodID constructorFileResult = NULL;
 // Forward declarations
 ////////////////////////////////////////////////////////////
 
-static int register_natives_XposedBridge(JNIEnv* env, jclass clazz);
+static int register_natives_ZposedBridge(JNIEnv* env, jclass clazz);
 static int register_natives_XResources(JNIEnv* env, jclass clazz);
 static int register_natives_ZygoteService(JNIEnv* env, jclass clazz);
 
@@ -65,27 +65,27 @@ int readIntConfig(const char* fileName, int defaultValue) {
 // Library initialization
 ////////////////////////////////////////////////////////////
 
-bool initXposedBridge(JNIEnv* env) {
-    classXposedBridge = env->FindClass(CLASS_XPOSED_BRIDGE);
-    if (classXposedBridge == NULL) {
+bool initZposedBridge(JNIEnv* env) {
+    classZposedBridge = env->FindClass(CLASS_XPOSED_BRIDGE);
+    if (classZposedBridge == NULL) {
         ALOGE("Error while loading Xposed class '%s':", CLASS_XPOSED_BRIDGE);
         logExceptionStackTrace();
         env->ExceptionClear();
         return false;
     }
-    classXposedBridge = reinterpret_cast<jclass>(env->NewGlobalRef(classXposedBridge));
+    classZposedBridge = reinterpret_cast<jclass>(env->NewGlobalRef(classZposedBridge));
 
     ALOGI("Found Xposed class '%s', now initializing", CLASS_XPOSED_BRIDGE);
-    if (register_natives_XposedBridge(env, classXposedBridge) != JNI_OK) {
+    if (register_natives_ZposedBridge(env, classZposedBridge) != JNI_OK) {
         ALOGE("Could not register natives for '%s'", CLASS_XPOSED_BRIDGE);
         logExceptionStackTrace();
         env->ExceptionClear();
         return false;
     }
 
-    methodXposedBridgeHandleHookedMethod = env->GetStaticMethodID(classXposedBridge, "handleHookedMethod",
+    methodZposedBridgeHandleHookedMethod = env->GetStaticMethodID(classZposedBridge, "handleHookedMethod",
         "(Ljava/lang/reflect/Member;ILjava/lang/Object;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
-    if (methodXposedBridgeHandleHookedMethod == NULL) {
+    if (methodZposedBridgeHandleHookedMethod == NULL) {
         ALOGE("ERROR: could not find method %s.handleHookedMethod(Member, int, Object, Object, Object[])", CLASS_XPOSED_BRIDGE);
         logExceptionStackTrace();
         env->ExceptionClear();
@@ -130,7 +130,7 @@ bool initZygoteService(JNIEnv* env) {
 }
 
 void onVmCreatedCommon(JNIEnv* env) {
-    if (!initXposedBridge(env) || !initZygoteService(env)) {
+    if (!initZposedBridge(env) || !initZygoteService(env)) {
         return;
     }
 
@@ -334,27 +334,27 @@ jbyteArray ZygoteService_readFile(JNIEnv* env, jclass, jstring filenameJ) {
 // JNI methods registrations
 ////////////////////////////////////////////////////////////
 
-int register_natives_XposedBridge(JNIEnv* env, jclass clazz) {
+int register_natives_ZposedBridge(JNIEnv* env, jclass clazz) {
     const JNINativeMethod methods[] = {
-        NATIVE_METHOD(XposedBridge, hadInitErrors, "()Z"),
-        NATIVE_METHOD(XposedBridge, getStartClassName, "()Ljava/lang/String;"),
-        NATIVE_METHOD(XposedBridge, getRuntime, "()I"),
-        NATIVE_METHOD(XposedBridge, startsSystemServer, "()Z"),
-        NATIVE_METHOD(XposedBridge, getXposedVersion, "()I"),
-        NATIVE_METHOD(XposedBridge, initXResourcesNative, "()Z"),
-        NATIVE_METHOD(XposedBridge, hookMethodNative, "(Ljava/lang/reflect/Member;Ljava/lang/Class;ILjava/lang/Object;)V"),
-        NATIVE_METHOD(XposedBridge, setObjectClassNative, "(Ljava/lang/Object;Ljava/lang/Class;)V"),
-        NATIVE_METHOD(XposedBridge, dumpObjectNative, "(Ljava/lang/Object;)V"),
-        NATIVE_METHOD(XposedBridge, cloneToSubclassNative, "(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;"),
-        NATIVE_METHOD(XposedBridge, removeFinalFlagNative, "(Ljava/lang/Class;)V"),
+        NATIVE_METHOD(ZposedBridge, hadInitErrors, "()Z"),
+        NATIVE_METHOD(ZposedBridge, getStartClassName, "()Ljava/lang/String;"),
+        NATIVE_METHOD(ZposedBridge, getRuntime, "()I"),
+        NATIVE_METHOD(ZposedBridge, startsSystemServer, "()Z"),
+        NATIVE_METHOD(ZposedBridge, getXposedVersion, "()I"),
+        NATIVE_METHOD(ZposedBridge, initXResourcesNative, "()Z"),
+        NATIVE_METHOD(ZposedBridge, hookMethodNative, "(Ljava/lang/reflect/Member;Ljava/lang/Class;ILjava/lang/Object;)V"),
+        NATIVE_METHOD(ZposedBridge, setObjectClassNative, "(Ljava/lang/Object;Ljava/lang/Class;)V"),
+        NATIVE_METHOD(ZposedBridge, dumpObjectNative, "(Ljava/lang/Object;)V"),
+        NATIVE_METHOD(ZposedBridge, cloneToSubclassNative, "(Ljava/lang/Object;Ljava/lang/Class;)Ljava/lang/Object;"),
+        NATIVE_METHOD(ZposedBridge, removeFinalFlagNative, "(Ljava/lang/Class;)V"),
 #if PLATFORM_SDK_VERSION >= 21
-        NATIVE_METHOD(XposedBridge, invokeOriginalMethodNative,
+        NATIVE_METHOD(ZposedBridge, invokeOriginalMethodNative,
             "!(Ljava/lang/reflect/Member;I[Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;"),
-        NATIVE_METHOD(XposedBridge, closeFilesBeforeForkNative, "()V"),
-        NATIVE_METHOD(XposedBridge, reopenFilesAfterForkNative, "()V"),
+        NATIVE_METHOD(ZposedBridge, closeFilesBeforeForkNative, "()V"),
+        NATIVE_METHOD(ZposedBridge, reopenFilesAfterForkNative, "()V"),
 #endif
 #if PLATFORM_SDK_VERSION >= 24
-        NATIVE_METHOD(XposedBridge, invalidateCallersNative, "([Ljava/lang/reflect/Member;)V"),
+        NATIVE_METHOD(ZposedBridge, invalidateCallersNative, "([Ljava/lang/reflect/Member;)V"),
 #endif
     };
     return env->RegisterNatives(clazz, methods, NELEM(methods));

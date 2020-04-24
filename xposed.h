@@ -13,7 +13,7 @@
 #define XPOSED_LIB_DALVIK        XPOSED_LIB_DIR "libxposed_dalvik.so"
 #define XPOSED_LIB_ART           XPOSED_LIB_DIR "libzposed_art.so"
 #define XPOSED_JAR               "/system/framework/ZposedBridge.jar"
-#define XPOSED_JAR_NEWVERSION    XPOSED_DIR "bin/XposedBridge.jar.newversion"
+#define XPOSED_JAR_NEWVERSION    XPOSED_DIR "bin/ZposedBridge.jar.newversion"
 #define XPOSED_LOAD_BLOCKER      XPOSED_DIR "conf/disabled"
 #define XPOSED_SAFEMODE_NODELAY  XPOSED_DIR "conf/safemode_nodelay"
 #define XPOSED_SAFEMODE_DISABLE  XPOSED_DIR "conf/safemode_disable"

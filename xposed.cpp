@@ -320,7 +320,7 @@ static bool addPathToEnv(const char* name, const char* path) {
     return true;
 }
 
-/** Add XposedBridge.jar to the Java classpath. */
+/** Add ZposedBridge.jar to the Java classpath. */
 bool addJarToClasspath() {
     ALOGI("-----------------");
 

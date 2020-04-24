@@ -52,8 +52,8 @@ bool xposedInitLib(XposedShared* shared) {
 /** Called very early during VM startup. */
 bool onVmCreated(JNIEnv*) {
     // TODO: Handle CLASS_MIUI_RESOURCES?
-    ArtMethod::xposed_callback_class = classXposedBridge;
-    ArtMethod::xposed_callback_method = methodXposedBridgeHandleHookedMethod;
+    ArtMethod::xposed_callback_class = classZposedBridge;
+    ArtMethod::xposed_callback_method = methodZposedBridgeHandleHookedMethod;
     return true;
 }
 

@@ -55,7 +55,7 @@ bool onVmCreated(JNIEnv* env) {
     }
     env->ExceptionClear();
 
-    Method* xposedInvokeOriginalMethodNative = (Method*) env->GetStaticMethodID(classXposedBridge, "invokeOriginalMethodNative",
+    Method* xposedInvokeOriginalMethodNative = (Method*) env->GetStaticMethodID(classZposedBridge, "invokeOriginalMethodNative",
         "(Ljava/lang/reflect/Member;I[Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
     if (xposedInvokeOriginalMethodNative == NULL) {
         ALOGE("ERROR: could not find method %s.invokeOriginalMethodNative(Member, int, Class[], Class, Object, Object[])", CLASS_XPOSED_BRIDGE);
@@ -208,7 +208,7 @@ void hookedMethodCallback(const u4* args, JValue* pResult, const Method* method,
 
     // call the Java handler function
     JValue result;
-    dvmCallMethod(self, (Method*) methodXposedBridgeHandleHookedMethod, NULL, &result,
+    dvmCallMethod(self, (Method*) methodZposedBridgeHandleHookedMethod, NULL, &result,
         originalReflected, (int) original, additionalInfo, thisObject, argsArray);
 
     dvmReleaseTrackedAlloc(argsArray, self);
